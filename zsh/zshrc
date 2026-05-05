@@ -1,0 +1,10 @@
+for file in ~/.config/zsh/config/*.zsh; do
+    source "$file"
+done
+
+# 窗口大小改变时自动重绘提示符
+TRAPWINCH() {
+    zle && zle reset-prompt
+}
+
+

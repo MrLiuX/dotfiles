@@ -1,0 +1,6 @@
+[user]
+    name = Asher Liu
+    email = i@mrliux.com
+
+[core]
+    excludesfile = ~/.gitignore_global

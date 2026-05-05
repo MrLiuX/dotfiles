@@ -1,0 +1,57 @@
+.DS_Store
+.AppleDouble
+.LSOverride
+.Spotlight-V100
+.Trashes
+.VolumeIcon.icns
+.com.apple.timemachine.supported
+.fseventsd
+.metadata_never_index
+.TemporaryItems
+.icond
+.documentRevisions-V100
+Desktop Services Store
+Thumbs.db
+
+
+# 忽略 ./claude/ 文件夹下的所有内容
+claude/*
+!claude/settings.json
+
+
+# Vim / Neovim
+*.swp
+*.swo
+*.swo.*
+*.un~
+*.pyc
+*.pyo
+*.class
+
+# VS Code
+.vscode/
+.history/
+*.code-workspace
+
+
+*.log
+*.lock
+*.tmp
+*.temp
+
+.env
+*.secret
+*.key
+*.pem
+*_rsa
+*_ed25519
+
+venv/
+.venv/
+env/
+.env/
+
+nvim/undo/
+
+tmux/tmux.conf.bb
+nvim/init.lua.backup
