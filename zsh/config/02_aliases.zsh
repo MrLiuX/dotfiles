@@ -9,13 +9,10 @@ alias tn='tmux new -s'
 alias ta='tmux attach'
 alias ts='tmux ls'
 
-alias rr='ranger'
 alias vi="vim"
 alias makeci="sudo make clean install"
-alias c="clear;neofetch"
 alias chmodx="chmod +x"
 alias ff="source ~/.zshrc ;clear"
-alias n="neofetch"
 alias sshlx="ssh asher@47.108.254.175"
 alias cat='bat -n'
 
