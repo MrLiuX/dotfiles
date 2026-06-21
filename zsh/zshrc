@@ -8,3 +8,115 @@ TRAPWINCH() {
 }
 
 
+
+# Added by LM Studio CLI (lms)
+export PATH="$PATH:/Users/asher/.lmstudio/bin"
+# End of LM Studio CLI section
+
+export MANPAGER="sh -c 'col -bx | bat -l man -p'"
+
+if [[ -n $TMUX ]]; then
+    __kdwithtmuxpopup() {
+        tmux display-popup "kd $@"
+    }
+    alias kd=__kdwithtmuxpopup
+fi
+
+source <(fzf --zsh) export FZF_COMPLETION_TRIGGER='**'
+
+export NVM_DIR="$HOME/.nvm"
+  [ -s "/opt/homebrew/opt/nvm/nvm.sh" ] && \. "/opt/homebrew/opt/nvm/nvm.sh"  # This loads nvm
+  [ -s "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm" ] && \. "/opt/homebrew/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+
+  export DISABLE_AUTOUPDATER=1
+
+
+  # ---------- SSH 隧道服务管理函数（com.user.ssh-proxy）----------
+# 使用：
+#   proxy start    - 启动隧道
+#   proxy stop     - 停止隧道
+#   proxy restart  - 重启隧道
+#   proxy status   - 查看状态
+#   proxy load     - 加载服务（开机自启）
+#   proxy unload   - 卸载服务（取消自启）
+#   proxy log      - 查看实时日志
+# ----------------------------------------------------------------
+
+proxy() {
+    local service="com.user.ssh-proxy"
+    local plist="$HOME/Library/LaunchAgents/${service}.plist"
+    local uid=$(id -u)
+
+    case "$1" in
+        start)
+            echo "▶ 启动隧道服务..."
+            launchctl start "$service"
+            ;;
+        stop)
+            echo "■ 停止隧道服务..."
+            launchctl stop "$service"
+            ;;
+        restart)
+            echo "↻ 重启隧道服务..."
+            launchctl stop "$service" 2>/dev/null
+            sleep 1
+            launchctl start "$service"
+            ;;
+        status)
+            echo "📡 SSH 隧道服务状态："
+            if launchctl list | grep -q "$service"; then
+                local pid=$(launchctl list | grep "$service" | awk '{print $1}')
+                if [[ "$pid" =~ ^[0-9]+$ ]] && [ "$pid" -gt 0 ]; then
+                    echo "  状态: 🟢 运行中 (PID: $pid)"
+                elif [[ "$pid" == "-" ]]; then
+                    echo "  状态: 🟡 已加载但未运行"
+                else
+                    echo "  状态: 🔴 已退出 (上次退出码: $pid)"
+                fi
+            else
+                echo "  状态: ⚫ 服务未加载"
+            fi
+            # 额外检查端口
+            if lsof -ti TCP:1080 -sTCP:LISTEN >/dev/null 2>&1; then
+                echo "  端口: 🟢 1080 监听中"
+            else
+                echo "  端口: 🔴 1080 未监听"
+            fi
+            ;;
+        load)
+            if [ ! -f "$plist" ]; then
+                echo "❌ 找不到 plist 文件：$plist"
+                return 1
+            fi
+            echo "⚙ 加载服务（设置开机自启）..."
+            launchctl bootstrap "gui/$uid" "$plist" 2>/dev/null || \
+            launchctl load "$plist" 2>/dev/null || {
+                echo "❌ 加载失败，请检查 plist 文件"
+                return 1
+            }
+            echo "✅ 加载成功"
+            ;;
+        unload)
+            echo "⚙ 卸载服务（取消开机自启）..."
+            launchctl bootout "gui/$uid/$service" 2>/dev/null || \
+            launchctl unload "$plist" 2>/dev/null || {
+                echo "❌ 卸载失败，可能未加载"
+                return 1
+            }
+            echo "✅ 卸载成功"
+            ;;
+        log)
+            echo "📜 实时日志 (Ctrl+C 退出)..."
+            tail -f /tmp/ssh-proxy.stdout.log /tmp/ssh-proxy.stderr.log
+            ;;
+        *)
+            echo "用法: proxy {start|stop|restart|status|load|unload|log}"
+            ;;
+    esac
+}
+
+# 可选：自动补全
+compdef '_values "proxy commands" start stop restart status load unload log' proxy 2>/dev/null
+
+# 启动终端时自动展示一次状态（可选，注释掉则不显示）
+# proxy status

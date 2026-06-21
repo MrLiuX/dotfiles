@@ -4,6 +4,9 @@ vim.g.mapleader = ' '
 vim.g.maplocalleader = ' '
 
 vim.keymap.set("n", "<Leader>w", ":w<CR>", {desc = "保存文件"})
+vim.keymap.set("n", "<Leader>q", ":q<CR>", {desc = "退出文件"})
+vim.keymap.set("i", "<C-a>", "<C-o>^", { desc = "跳到第一个非空字符" })
+vim.keymap.set('i', '<C-k>', '<C-o>D', { desc = '删除到行尾' })
 
 --[[
 -- 禁用方向键（鼓励使用hjkl）

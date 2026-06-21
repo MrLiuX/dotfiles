@@ -1,0 +1,24 @@
+{
+  "connections": {
+    "AliyunECS": {
+      "host_name": "AliyunECS",
+      "last_connect": "2026-05-18T08:49:00.402548+08:00",
+      "connect_count": 3
+    },
+    "Asher'sNAS": {
+      "host_name": "Asher'sNAS",
+      "last_connect": "2026-05-13T15:53:22.427666+08:00",
+      "connect_count": 4
+    },
+    "AsherNAS": {
+      "host_name": "AsherNAS",
+      "last_connect": "2026-06-20T02:56:13.226046+08:00",
+      "connect_count": 15
+    },
+    "orb": {
+      "host_name": "orb",
+      "last_connect": "2026-05-24T16:05:49.840344+08:00",
+      "connect_count": 2
+    }
+  }
+}

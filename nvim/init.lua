@@ -1,5 +1,6 @@
 -- 插件管理器 lazy.nvim（自动安装 + 插件列表）
 require('plugins.lazy')
+require('plugins.markview')
 require('core.options')
 require('core.keymaps')
 require('core.autocmds')

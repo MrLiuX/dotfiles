@@ -141,16 +141,23 @@ function _dynamic_prompt() {
     local user="${USER}"
 
     # 真实短主机名
-    local real_host
-    if command -v hostname >/dev/null 2>&1; then
-        real_host=$(hostname -s)
-    else
-        real_host="${HOST:-unknown}"
+    if command -v scutil >/dev/null 2>&1; then
+        # 直接读取系统设置中的 ComputerName（可包含空格和撇号）
+        real_host=$(scutil --get ComputerName 2>/dev/null)
+    fi
+
+    # 如果获取失败（比如在非macOS系统上），则退回到传统的 hostname
+    if [[ -z "$real_host" ]]; then
+        if command -v hostname >/dev/null 2>&1; then
+            real_host=$(hostname -s)
+        else
+            real_host="${HOST:-unknown}"
+        fi
     fi
 
     # 如果真实主机名等于特定值，显示为 MacOS，否则使用 HOST 变量或真实主机名
     local host
-    if [[ "$real_host" == "Ashers-macbookProM3max" ]]; then
+    if [[ "$real_host" == "Asher'sMAC" ]]; then
         host="MacOS"
     else
         host="${HOST:-$real_host}"
